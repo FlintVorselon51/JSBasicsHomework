@@ -1,0 +1,32 @@
+<script type="text/javascript">
+	'use strict';
+	function addition(arg1, arg2) {
+		return arg1 + arg2
+	}
+	function subtraction(arg1, arg2) {
+		return arg1 - arg2
+	}
+	function multiplication(arg1, arg2) {
+		return arg1 * arg2
+	}
+	function division(arg1, arg2) {
+		return arg1 / arg2
+	}
+	function mathOperation(arg1, arg2, operation) {
+		switch (operation) {
+			case '+': 
+				return addition(arg1, arg2); 
+			case '-': 
+				return subtraction(arg1, arg2);  
+			case '*': 
+				return multiplication(arg1, arg2); 
+			case '/': 
+				return division(arg1, arg2); 
+
+		}
+	}
+	console.log(mathOperation(2, 3, '+'));
+	console.log(mathOperation(5, 1, '-'));
+	console.log(mathOperation(10, 5, '*'));
+	console.log(mathOperation(10, 3, '/'));
+</script>
