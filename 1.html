@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>1</title>
+    <style>
+        .product {
+            border: 1px solid #000;
+            margin-bottom: 10px;
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h3>Каталог</h3>
+    <div class="catalog"></div>
+    <h3>Корзина</h3>
+    <div class="cart"></div>
+    <button class="cart-btn">Очистить корзину</button>
+</body>
+<script type="text/javascript">
+    'use strict';
+
+    const cart = {
+        cartBlock: null,
+        cartBtn: null,
+        cartBlockClass: 'cart',
+        cartBtnClass: 'cart-btn',
+
+        products: [],
+
+        init() {
+            this.cartBlock = document.querySelector(`.${this.cartBlockClass}`);
+            this.cartBtn = document.querySelector(`.${this.cartBtnClass}`)
+            this.cartBtn.addEventListener('click', () => this.clearCart());
+            this.render();
+        },
+
+        render() {
+            let htmlString = '';
+            if (this.products.length === 0)
+                htmlString = '<p>Коризна пуста</p>';
+            for (let product of this.products) {
+                htmlString += this.renderProduct(product);
+            }
+            if (this.products.length !== 0)
+                htmlString += `<p>В корзине ${this.products.length} позиций стоимостью ${this.getCartPrice()}</p>`;
+            this.cartBlock.innerHTML = htmlString;
+        },
+
+        renderProduct(product) {
+            let productString = '<div class="product">';
+            productString += `<div><b>Название:</b> ${product.name}</div>`;
+            productString += `<div><b>Цена за шутку:</b> ${product.priceForOne}</div>`;
+            productString += `<div><b>Количество:</b> ${product.quantity}</div>`;
+            productString += `<div><b>Стоимость:</b> ${product.quantity * product.priceForOne}</div>`;
+            productString += '</div>';
+            return productString;
+        },
+
+        getCartPrice() {
+            let sum = 0;
+            for (let product of this.products) {
+                sum += product.priceForOne * product.quantity;
+            }
+            return sum;
+        },
+
+        clearCart() {
+            this.products = [];
+            this.render()
+        },
+
+        addProduct(name, priceForOne) {
+            let product = this.checkProductInCart(name)
+            if (product)
+                ++product.quantity;
+            else
+                this.products.push({name: name, priceForOne: priceForOne, quantity: 1});
+            this.render();
+        },
+
+        checkProductInCart(name) {
+            for (let product of this.products) {
+                if (name === product.name)
+                    return product;
+            }
+            return false;
+        }
+    }
+
+    const catalog = {
+        catalogBlock: null,
+        catalogBlockClass: 'catalog',
+        usedCart: cart,
+        products: [
+            {
+                product_id: 1,
+                name: 'Апельсин',
+                price: 50
+            },
+            {
+                product_id: 2,
+                name: 'Яблоко',
+                price: 30
+            },
+            {
+                product_id: 3,
+                name: 'Груша',
+                price: 40
+            },
+        ],
+        init() {
+            this.catalogBlock = document.querySelector(`.${this.catalogBlockClass}`);
+
+            this.render()
+        },
+
+        render() {
+            for (let product of this.products)
+                this.catalogBlock.appendChild(this.renderProduct(product));
+        },
+
+        renderProduct(product) {
+            let productBlock = document.createElement('div');
+            productBlock.className = 'product';
+            let productString = '';
+            productString += `<div><b>Название:</b> ${product.name}</div>`;
+            productString += `<div><b>Цена за шутку:</b> ${product.price}</div>`;
+
+            productBlock.innerHTML = productString;
+            let btn = document.createElement('button');
+            btn.textContent = 'Добавить в корзину';
+            btn.addEventListener('click', () => this.usedCart.addProduct(product.name, product.price));
+            productBlock.appendChild(btn);
+
+            return productBlock;
+        },
+    }
+
+    cart.init()
+    catalog.init()
+</script>
+</html>
