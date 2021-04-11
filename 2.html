@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>2</title>
+    <style>
+        .chessboard { border-spacing: 0; border-collapse: collapse; }
+        .chessboard th { padding: .5em; }
+        .chessboard td { border: 1px solid; width: 2em; height: 2em; text-align: center; }
+        .chessboard .light { background: #eee; color: #000; }
+        .chessboard .dark { background: #000; color: #eee; }
+    </style>
+</head>
+<body>
+<div class="chessboard">
+</div>
+</body>
+<script type="text/javascript">
+    'use strict';
+
+    function choose_piece(row, col) {
+        let piece = '';
+        if (row === 1 || row === 6)
+            piece = 'П';
+        if (row === 0 || row === 7) {
+            switch (col) {
+                case 0:
+                case 7:
+                    piece = 'Л';
+                    break;
+                case 1:
+                case 6:
+                    piece = 'к';
+                    break;
+                case 2:
+                case 5:
+                    piece = 'С';
+                    break;
+                case 3:
+                    piece = 'Ф';
+                    break;
+                case 4:
+                    piece = 'К';
+                    break;
+            }
+        }
+        return piece;
+    }
+
+    function generate_chessboard() {
+        let htmlString = '<table>';
+        htmlString += '<tr><th></th>';
+        'abcdefgh'.split('').forEach(el => htmlString += `<th>${el}</th>`);
+        for (let i = 0; i < 8; ++i) {
+            htmlString += `<tr><th>${8 - i}</th>`;
+            for (let j = 0; j < 8; ++j) {
+                if ((i + j) % 2 === 0)
+                    htmlString += '<td class="light">';
+                else
+                    htmlString += '<td class="dark">';
+                htmlString += choose_piece(i, j);
+                htmlString += '</td>';
+            }
+            htmlString += '</tr>'
+        }
+        htmlString += '</table>';
+        return htmlString
+    }
+
+    const chessboard = document.querySelector('.chessboard');
+    chessboard.innerHTML = generate_chessboard();
+</script>
+</html>
